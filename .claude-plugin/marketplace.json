@@ -1,0 +1,16 @@
+{
+  "name": "kivi",
+  "owner": {
+    "name": "Lucas Kivi"
+  },
+  "metadata": {
+    "description": "Claude Code plugins for personal workflows."
+  },
+  "plugins": [
+    {
+      "name": "kivi-sdlc",
+      "description": "Personal software development lifecycle workflow: /recon readies a single-PR task, fleshing it into a living spec and gauging readiness; it can dispatch /uav investigators for historical context and tells you to split work that's too big for one PR. The spec lives in a pluggable backend — a tracker or a markdown file (checked-in or scratch). /plan and /work carry that spec through implementation. /respond handles PR review afterward, starting from the Work notes /work leaves on the spec and drafting replies it posts only on your say-so. /carve sits upstream: it divides an epic into ready-to-recon pieces, each a generic ticket/spec in a tracker or file backend, that then flow through /recon → /plan → /work. /warroom oversees 2-3 tickets through that pipeline to open PRs — one background agent per ticket in its own worktree, moving in waves (all recon, then all plan, then all work), with an ordering checkpoint that stacks a dependent ticket on the one it builds from, escalating conservatively to you only the decisions that need a human.",
+      "source": "./plugins/kivi-sdlc"
+    }
+  ]
+}

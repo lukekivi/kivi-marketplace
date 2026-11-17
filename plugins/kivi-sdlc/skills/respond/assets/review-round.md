@@ -1,0 +1,2 @@
+- **Review round <YYYY-MM-DD>** — <PR link>
+  - <thread URL> — fixed | pushed back | deferred | asked — <what changed (commit) or why not, one line>
