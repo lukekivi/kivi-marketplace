@@ -1,7 +1,7 @@
 ---
 name: work
 description: "Execute a repo plan end to end: implement, validate with parallel subagent review, and commit at the end."
-argument-hint: "[ticket key, .claude/kivi-sdlc/plans/... plan, or .claude/kivi-sdlc/todo/... file path]"
+argument-hint: "[spec locator (ticket key or spec file), .claude/kivi-sdlc/plans/... plan, or .claude/kivi-sdlc/todo/... file path]"
 ---
 
 ## Workflow
@@ -19,7 +19,7 @@ argument-hint: "[ticket key, .claude/kivi-sdlc/plans/... plan, or .claude/kivi-s
 ### Orientation
 
 3. Resolve `<input_document> $ARGUMENTS </input_document>`.
-   - If it is a **spec locator** — a tracker key/URL, or a path to a file carrying a `🤖 kivi-sdlc spec` block — read the spec through the matching adapter in `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`. The block's **Plan** section is your work doc; the surrounding sections are the context recon and plan left behind.
+   - If it is a **spec locator** — a tracker key/URL, or a path to a spec file with campaigns beside it — read the **current campaign** through the matching adapter in `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`. Its **Plan** section is your work doc. Its Recon (acceptance criteria, findings, working-tree edits), the spec prose, and earlier campaigns are context recon and plan left behind — read them on demand, not by default.
    - Otherwise it is a plain file path. Prefer `.claude/kivi-sdlc/plans/` for implementation plans and `.claude/kivi-sdlc/todo/` for tracked follow-up work.
 4. Read the work doc completely.
 5. If anything is unclear or ambiguous after reading the plan, references, and related code, ask the user now.
@@ -75,11 +75,12 @@ After all plan work is complete, validate the full body of work with subagent re
 13. Commit all work using the 7 rules of great commit messages AND WITH NO CLAUDE CODE ATTRIBUTION.
     - Split the work into commits per the repo's commit-structuring convention — distinct changes get distinct commits.
     - Do not commit if tests are failing or work is incomplete.
-14. If the work came from a spec, update its `🤖 kivi-sdlc spec` block via the adapter from `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`, never touching any human-authored prose above the block — in one write:
-    - flip the Stage line to `recon ✓ · plan ✓ · work ✓`;
-    - write the collapsed **Work notes** (shape in `${CLAUDE_PLUGIN_ROOT}/skills/recon/assets/spec-block.md`). This is **required** — it is the handoff a later `/respond` agent starts from when review comes in, in place of your memory. Write what the diff won't say: decisions, deviations, soft spots. Add the PR link once one exists.
+14. If the work came from a spec, update its **current campaign** via the adapter's **update-campaign** from `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`, never touching any other campaign — in one write:
+    - flip its Stage to `recon ✓ · plan ✓ · work ✓`, and add the **PR** line once a PR exists — `/respond` finds the campaign by it;
+    - rewrite its Summary to say what shipped;
+    - write the collapsed **Work notes** (shape in `${CLAUDE_PLUGIN_ROOT}/skills/recon/assets/campaign.md`). This is **required** — it is the handoff a later `/respond` agent starts from when review comes in, in place of your memory. Write what the diff won't say: decisions, deviations, soft spots. Add the PR link once one exists.
 
-    A checked-in spec file's edit rides along in the working tree — do not give it a dedicated commit. With no spec (a plan/todo file), append the Work notes to that file instead.
+    Leave the spec prose alone except through an approved **update-prose**. A checked-in campaign file's edit rides along in the working tree — do not give it a dedicated commit. With no spec (a plan/todo file), append the Work notes to that file instead.
 15. Report what shipped, quality-check results, commit summary, branch name, and any follow-up work.
 
 ## Investigating deeper (UAV)

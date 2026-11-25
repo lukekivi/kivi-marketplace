@@ -1,6 +1,6 @@
 ---
 name: plan
-description: Brainstorm a feature or change with the user, do the real codebase read to understand how it fits, then produce a clear, implementable spec for /work — centered on the high-level coding decisions (architecture, module placement, approach, contracts) rather than an exhaustive step-by-step checklist. Works from a spec locator — a ticket key or a spec file (checked-in or scratch) carrying a kivi-sdlc spec block — reading the spec and writing the plan back onto it; or from a freeform task. With no spec, creates `.claude/kivi-sdlc/plans/YYYY-MM-DD-NNN-slug.md`.
+description: Brainstorm a feature or change with the user, do the real codebase read to understand how it fits, then produce a clear, implementable spec for /work — centered on the high-level coding decisions (architecture, module placement, approach, contracts) rather than an exhaustive step-by-step checklist. Works from a spec locator — a ticket key or a spec file (checked-in or scratch) — reading the spec prose and its current campaign's Recon and writing the plan into that campaign; or from a freeform task. With no spec, creates `.claude/kivi-sdlc/plans/YYYY-MM-DD-NNN-slug.md`.
 argument-hint: "[spec locator (ticket key or spec file), or a feature idea]"
 ---
 
@@ -12,8 +12,9 @@ argument-hint: "[spec locator (ticket key or spec file), or a feature idea]"
 
 ### Phase 0 — Detect mode
 
-0. Check if `$ARGUMENTS` is a **spec locator** — a tracker key/URL (`PROJ-###`, a tracker URL) or a path to a file carrying a `🤖 kivi-sdlc spec` block (the recon spec, checked-in or in `.claude/kivi-sdlc/scratch/`).
-   - If yes, enter **spec mode**: read the spec through the matching adapter in `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`. Recon has already framed the work there — the task, its acceptance criteria, and what reconnaissance learned. That is your starting point: build on it rather than redoing it. Record the locator as the output target and pass it forward. If a tracker argument has no spec block, treat its whole description as the freeform task. Continue in normal mode.
+0. Check if `$ARGUMENTS` is a **spec locator** — a tracker key/URL (`PROJ-###`, a tracker URL) or a path to a spec file with campaigns beside it (the recon spec, checked-in or in `.claude/kivi-sdlc/scratch/`).
+   - If yes, enter **spec mode**: through the matching adapter in `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`, read the spec prose and the **current campaign's Recon** — nothing else by default. Recon has already framed the work there — the task, its acceptance criteria, and what reconnaissance learned. That is your starting point: build on it rather than redoing it. Earlier campaigns are on demand: list them and read a Summary first when a question needs one. Record the locator as the output target and pass it forward. Continue in normal mode.
+   - If the locator's spec has **no campaign yet**, this is not spec mode — only `/recon` opens campaigns. Treat the prose as the freeform task and write a normal-mode plan file; tell the user that running `/recon <locator>` first would put the plan on the spec.
    - If `$ARGUMENTS` is any other existing file path, read the file's contents and treat them as the freeform task description. Continue in normal mode.
    - Otherwise, proceed in normal mode treating `$ARGUMENTS` as the freeform task description.
 
@@ -68,7 +69,7 @@ Do not recommend on a weak foundation — keep exploring (Phase 2) or dispatch U
 ### Phase 4 — Write the plan
 
 9. Determine the output destination:
-   - **Spec mode**: the plan lives on the spec. Write it into the **Plan** section of the `🤖 kivi-sdlc spec` block via the adapter from `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`, and flip the Stage line to `recon ✓ · plan ✓ · work`. Never touch any human-authored prose above the block. On a tracker, confirm before writing. A long plan may live inline in the block or in a local plan file linked from the block — keep the spec readable.
+   - **Spec mode**: the plan lives in the current campaign. Write its **Plan** section via the adapter's **update-campaign** from `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`, flip its Stage to `recon ✓ · plan ✓ · work`, and refresh its Summary if the plan changes the picture. Never touch the campaign's Recon or any other campaign. Leave the spec prose alone except through an approved **update-prose**. On a tracker, confirm before writing. A long plan may live inline in the campaign or in a local plan file linked from it — keep the campaign readable.
    - **Normal mode** (no spec): generate `.claude/kivi-sdlc/plans/YYYY-MM-DD-NNN-slug.md` where `YYYY-MM-DD` is today's date, `NNN` is the next available zero-padded sequence for that date, and the slug is a short kebab-case summary (3-5 words). Create the `.claude/kivi-sdlc/plans/` directory if it does not exist.
 10. Write the plan from `${CLAUDE_SKILL_DIR}/assets/plan-template.md`.
     - Use the template as a scaffold, not a rigid form. Keep only the sections that apply, and add sections when the work needs more structure.
