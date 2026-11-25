@@ -8,8 +8,9 @@ Tests:
   * marketplace.json shape and that each listed plugin source resolves to a real dir
   * each plugin.json shape (name, version, description, author object, etc.)
   * each SKILL.md has YAML frontmatter with name/description/argument-hint
-  * every `${CLAUDE_PLUGIN_ROOT}/skills/<skill>/assets/<file>` path referenced in
-    a SKILL.md actually exists on disk
+  * each marketplace entry's description matches its plugin.json description
+  * every `${CLAUDE_PLUGIN_ROOT}/...` and `${CLAUDE_SKILL_DIR}/...` path referenced
+    in any plugin markdown file actually exists on disk
 
 These do NOT test SKILL.md orchestration behavior — that's a prompt, not code.
 End-to-end behavioral tests against an LLM are out of scope here.
@@ -139,6 +140,14 @@ class PluginManifestTests(unittest.TestCase):
                 data = _load_json(p / ".claude-plugin" / "plugin.json")
                 self.assertEqual(p.name, data["name"], "dir name and manifest name must match")
 
+    def test_marketplace_description_matches_plugin_manifest(self):
+        # The marketplace repeats each plugin's description; keep the copies in sync.
+        marketplace = _load_json(MARKETPLACE_ROOT / ".claude-plugin" / "marketplace.json")
+        for entry in marketplace["plugins"]:
+            with self.subTest(plugin=entry["name"]):
+                manifest = _load_json(MARKETPLACE_ROOT / entry["source"] / ".claude-plugin" / "plugin.json")
+                self.assertEqual(entry["description"], manifest["description"])
+
     def test_marketplace_lists_each_plugin_dir(self):
         marketplace = _load_json(MARKETPLACE_ROOT / ".claude-plugin" / "marketplace.json")
         listed = {entry["name"] for entry in marketplace["plugins"]}
@@ -184,25 +193,47 @@ class SkillFrontmatterTests(unittest.TestCase):
                 )
 
 
-class SkillAssetReferenceTests(unittest.TestCase):
-    """Verify every `${CLAUDE_PLUGIN_ROOT}/skills/<x>/assets/<file>` reference
-    in SKILL.md actually exists on disk."""
+def _plugin_markdown_files() -> list[tuple[Path, Path]]:
+    """(plugin root, markdown file) for every *.md inside each plugin — skills,
+    their assets, and plugin-level docs like spec-backends.md all carry path
+    references the skills follow at runtime."""
+    return [(plugin, md) for plugin in _plugin_dirs() for md in sorted(plugin.rglob("*.md"))]
 
-    PATTERN = re.compile(
-        r"\$\{CLAUDE_PLUGIN_ROOT\}/skills/([A-Za-z0-9_-]+)/assets/([A-Za-z0-9_./-]+)"
-    )
 
-    def test_all_asset_references_resolve(self):
+def _owning_skill_dir(plugin_root: Path, md: Path) -> Path | None:
+    """`skills/<skill>/` for a file anywhere under it, else None."""
+    rel = md.relative_to(plugin_root).parts
+    if len(rel) >= 3 and rel[0] == "skills":
+        return plugin_root / "skills" / rel[1]
+    return None
+
+
+class PathReferenceTests(unittest.TestCase):
+    """Verify every `${CLAUDE_PLUGIN_ROOT}/...` and `${CLAUDE_SKILL_DIR}/...`
+    path in any plugin markdown file exists on disk, so a renamed or deleted
+    file can't leave a dangling reference behind."""
+
+    PLUGIN_ROOT_PATTERN = re.compile(r"\$\{CLAUDE_PLUGIN_ROOT\}/([A-Za-z0-9_./-]+)")
+    SKILL_DIR_PATTERN = re.compile(r"\$\{CLAUDE_SKILL_DIR\}/([A-Za-z0-9_./-]+)")
+
+    def _unresolved(self, pattern: re.Pattern, base_for) -> list[str]:
         missing: list[str] = []
-        for skill in _skill_files():
-            plugin_root = skill.parent.parent.parent  # plugins/<plugin>/
-            text = skill.read_text(encoding="utf-8")
-            for match in self.PATTERN.finditer(text):
-                skill_name, asset_name = match.group(1), match.group(2)
-                target = plugin_root / "skills" / skill_name / "assets" / asset_name
-                if not target.exists():
-                    missing.append(f"{skill.relative_to(MARKETPLACE_ROOT)} -> {target.relative_to(MARKETPLACE_ROOT)}")
-        self.assertFalse(missing, "Unresolved asset references:\n  " + "\n  ".join(missing))
+        for plugin_root, md in _plugin_markdown_files():
+            base = base_for(plugin_root, md)
+            for match in pattern.finditer(md.read_text(encoding="utf-8")):
+                # A path ending a sentence picks up the trailing period.
+                target_rel = match.group(1).rstrip(".")
+                if base is None or not (base / target_rel).exists():
+                    missing.append(f"{md.relative_to(MARKETPLACE_ROOT)} -> {match.group(0)}")
+        return missing
+
+    def test_plugin_root_references_resolve(self):
+        missing = self._unresolved(self.PLUGIN_ROOT_PATTERN, lambda plugin_root, _md: plugin_root)
+        self.assertFalse(missing, "Unresolved ${CLAUDE_PLUGIN_ROOT} references:\n  " + "\n  ".join(missing))
+
+    def test_skill_dir_references_resolve(self):
+        missing = self._unresolved(self.SKILL_DIR_PATTERN, _owning_skill_dir)
+        self.assertFalse(missing, "Unresolved ${CLAUDE_SKILL_DIR} references:\n  " + "\n  ".join(missing))
 
 
 if __name__ == "__main__":

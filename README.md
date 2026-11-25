@@ -27,7 +27,7 @@ Claude Code plugins for personal workflows.
 
 ## Tests
 
-`tests/test_plugins.py` — stdlib `unittest`, no dependencies. Validates manifests, SKILL.md frontmatter, and asset reference integrity across all plugins.
+`tests/test_plugins.py` — stdlib `unittest`, no dependencies. Validates manifests (and that marketplace descriptions match them), SKILL.md frontmatter, and that every `${CLAUDE_PLUGIN_ROOT}` / `${CLAUDE_SKILL_DIR}` path referenced in plugin markdown resolves.
 
 ```
 python3 -m unittest tests/test_plugins.py
