@@ -1,12 +1,12 @@
 ---
 name: respond
-description: "Address code review on an open PR: read the spec and its Work notes as the handoff from /work, triage every unresolved review thread (fix, push back, or ask), make the fixes in the repo's review-fix commit style, re-validate, push, and draft a reply per thread — posting them only when the user says to. Use when review comments land on a PR built by /work or /warroom."
+description: "Address code review on an open PR: read the Plan and Work notes of the spec's campaign that built the PR as the handoff from /work, triage every unresolved review thread (fix, push back, or ask), make the fixes in the repo's review-fix commit style, re-validate, push, and draft a reply per thread — posting them only when the user says to. Use when review comments land on a PR built by /work or /warroom."
 argument-hint: "[PR number or URL, optionally a spec locator and --post (e.g. 3466 PROJ-123 --post)]"
 ---
 
 ## What respond is
 
-The review-time counterpart to `/work`. The agent that implemented the PR is gone; the spec's **Work notes** (written by `/work`) are its handoff — decisions, deviations, soft spots. respond starts from those plus the PR itself, the way a compacted `/work` session would.
+The review-time counterpart to `/work`. The agent that implemented the PR is gone; the **Work notes** of the campaign that built the PR (written by `/work`) are its handoff — decisions, deviations, soft spots. respond starts from those plus the PR itself, the way a compacted `/work` session would.
 
 respond **drafts** a reply per thread and posts them only when the user says to — `--post` in the arguments, or after reading the drafts. Resolving threads also needs the user's say-so.
 
@@ -14,13 +14,14 @@ respond **drafts** a reply per thread and posts them only when the user says to 
 
 ### Pre-flight
 
-1. Resolve `$ARGUMENTS`: the PR (number or URL) and, if given, the spec locator. With no locator, find it from the PR — a ticket key in the branch name, title, or commit subjects — and read it through the adapter in `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`. No spec at all is fine; say so and continue on the PR alone.
+1. Resolve `$ARGUMENTS`: the PR (number or URL) and, if given, the spec locator. With no locator, find it from the PR — a ticket key in the branch name, title, or commit subjects. No spec at all is fine; say so and continue on the PR alone.
+   - **Find the campaign.** Through the adapter in `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`, list the spec's campaigns and pick the one whose **PR** line matches this PR. If none matches, fall back to the latest and say so.
 2. Check out the PR's head branch and confirm the tree is clean and in sync with the remote (`git status`, `git fetch`, compare to `origin/<branch>`).
 3. Make sure the PR's base is sensible; report it if it isn't.
 
 ### Gather
 
-4. Read the spec — especially **Plan** and **Work notes**.
+4. Read that campaign's **Plan** and **Work notes**. Its Recon, the spec prose, and other campaigns are on demand.
 5. Fetch every **unresolved** review thread, plus top-level review bodies and PR conversation comments addressed to the change. Skip resolved threads and automated bot noise unless it flags a real failure.
 6. Read the PR diff and the code around each thread.
 
@@ -47,7 +48,7 @@ respond **drafts** a reply per thread and posts them only when the user says to 
 
 13. **Draft replies** — one per thread, keyed by the thread URL. Short and direct: what changed (with the commit, if useful) or why not. No sycophancy.
 14. **Post** — only if the user said to (`--post`, or after reading the drafts): post each reply in its thread. Resolve a thread only if the user asks.
-15. If the work came from a spec, append a **Review round** to its Work notes via the adapter, from `${CLAUDE_SKILL_DIR}/assets/review-round.md`.
+15. If the work came from a spec, append a **Review round** inside that campaign's Work notes via the adapter's **update-campaign**, from `${CLAUDE_SKILL_DIR}/assets/review-round.md`. Never touch any other campaign. Leave the spec prose alone except through an approved **update-prose**.
 16. Report: inferred commit style + evidence, threads addressed, commits pushed, checks run, the reply drafts and which were posted, anything left for the user (asks, rebases owed, follow-ups).
 
 ## Principles

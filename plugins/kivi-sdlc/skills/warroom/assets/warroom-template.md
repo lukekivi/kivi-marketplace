@@ -4,7 +4,7 @@ entirely and keeps it current on every wave transition, escalation, answer,
 ordering decision, and PR. If context is lost, operation state is rebuilt from here.
 
 Keep entries terse. This is a board, not a transcript — full specs live on the
-tickets, plans on their spec blocks, and detail in the PRs.
+tickets, plans in their campaigns, and detail in the PRs.
 -->
 
 # Warroom — <operation name>

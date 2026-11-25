@@ -1,13 +1,13 @@
 <!--
 This is a PRE-RECON SEED — the body a piece of work starts life with, ready to be
-picked up by `/recon`. It is the human-authored prose that sits ABOVE the managed
-`🤖 kivi-sdlc spec` block; recon appends that block below it later.
+picked up by `/recon`. It becomes the piece's spec prose, which stays
+human-owned; recon opens Campaign Alpha BESIDE it (a ticket comment, or
+`<piece>/alpha.md` next to this file).
 
 Carve fills this in at the PRODUCT level — what the piece delivers and why, its
-scope and boundaries. It must NOT contain a `🤖 kivi-sdlc spec` block, a Stage
-line, or acceptance criteria — those belong to recon and the spec block — and it
-is not a design: how to build it is `/plan`'s job. Code pointers are orientation,
-not prescriptions.
+scope and boundaries. It must NOT contain a campaign, a Stage line, or acceptance
+criteria — those belong to recon's campaign — and it is not a design: how to
+build it is `/plan`'s job. Code pointers are orientation, not prescriptions.
 
 The frontmatter below is optional and file-backend only. In the tracker backend the
 seed is the ticket description (no frontmatter); the epic link and roadmap carry the
