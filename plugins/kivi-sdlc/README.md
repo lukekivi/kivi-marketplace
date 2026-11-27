@@ -1,6 +1,6 @@
 # kivi-sdlc
 
-Personal SDLC workflow for Claude Code. Spec-driven: when a task has a ticket, **the ticket is the source of truth**: the skills read it and record their work in campaigns beside it, leaving what you wrote alone unless you approve an edit.
+Personal SDLC workflow for Claude Code, run like a field operation: recon the task, plan it, work it to a PR, respond to review. Spec-driven: when a task has a ticket, **the ticket is the source of truth**. The skills read it and record their work in campaigns beside it, leaving what you wrote alone unless you approve an edit.
 
 ## The spec
 

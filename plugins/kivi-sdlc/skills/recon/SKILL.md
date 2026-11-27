@@ -100,7 +100,7 @@ This is the ready-to-plan gauge, presented to the user, and the loop that raises
      - **I'll provide it** — the user supplies the context. Fold it in, re-score (step 12), and continue.
    - Settle the question before moving to Phase 4 (see Hard rules).
 
-10. **Compose briefs and dispatch UAVs.** Spawn **as many UAVs as there are distinct concerns worth isolating**: one goal per UAV. Don't cram unrelated questions into one brief; don't split a single question across many. For each concern, write a brief:
+10. **Compose briefs and dispatch UAVs.** Dispatch **as many UAVs as there are distinct concerns worth isolating**: one goal per UAV. Don't cram unrelated questions into one brief; don't split a single question across many. For each concern, write a brief:
     - **Goal** — one line: the question this UAV answers.
     - **Seeds** — the relevant Phase 2 anchors (paths, commit hashes, ticket keys, PR numbers). They start the UAV off; it roams from there.
     - **Suggestions** — soft hints on where to look, if you have any.
