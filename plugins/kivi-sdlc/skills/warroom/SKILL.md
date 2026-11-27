@@ -7,11 +7,11 @@ disable-model-invocation: true
 
 ## What warroom is
 
-warroom is the command center. You hand it **2–3 tickets**; it drives them through the kivi-sdlc pipeline — `/recon → /uav → /plan → /work` — to open PRs. Each ticket lives in its own **worktree**, and each phase of it is run by a **fresh background agent** — the ticket's current campaign is the handoff between phases, never an agent's memory.
+warroom is the command center: handed **2–3 tickets**, it drives them through the kivi-sdlc pipeline — `/recon → /uav → /plan → /work` — to open PRs. Each ticket lives in its own **worktree**, and each phase of it is run by a **fresh background agent** — the ticket's current campaign is the handoff between phases, never an agent's memory.
 
 The fleet moves in **waves**: every ticket completes `recon` before any starts `plan`, and every ticket completes `plan` before any starts `work`. Between the plan and work waves sits the **ordering checkpoint** — with every plan in hand, warroom decides whether the work can run in parallel or must be **stacked** (a dependent ticket branching off the one it builds from).
 
-warroom never implements. It dispatches, triages, orders, and tracks. It is the **judgment layer**: ticket-agents report to it, and it decides — conservatively — what is worth your attention. The lasting artifact is the **warroom spec**: a persistent board (the anchor) that survives context compaction and lets warroom resume where it left off.
+warroom never implements. It dispatches, triages, orders, and tracks. It is the **judgment layer**: ticket-agents report to it, and it decides — conservatively — what is worth the user's attention. The lasting artifact is the **warroom spec**: a persistent board (the anchor) that survives context compaction and lets warroom resume where it left off.
 
 ## Hard rules (apply throughout)
 
