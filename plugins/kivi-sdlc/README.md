@@ -30,7 +30,7 @@ Where the spec lives is pluggable — see [`spec-backends.md`](spec-backends.md)
 
 For an epic too big for one PR, start with `/carve "<epic>"` (or `/carve PROJ-123`) to carve it into pieces — each a generic ticket/spec in a tracker or file backend. Then run the flow below on each piece — or hand 2–3 ready pieces to `/warroom PROJ-123 PROJ-124` to drive them to PR in waves while you stay the one decision point.
 
-1. `/recon PROJ-123` (or `/recon "<task description>"`) — review the readiness score; when prompted, choose to investigate deeper (dispatches UAVs), proceed, or supply the context yourself. recon opens Campaign Alpha as a comment on the ticket.
+1. `/recon PROJ-123` (or `/recon "<task description>"`) — review the readiness score; when prompted, choose to investigate deeper (dispatches UAVs), proceed, or supply the context yourself. recon opens Campaign Alpha beside the spec (a ticket comment, or a file next to the spec file, depending on the backend).
 2. `/clear`, then `/plan PROJ-123` — writes the Plan into the current campaign (or a local plan file when there's no spec).
 3. `/clear`, then `/work PROJ-123` — implements, reviews, commits, marks the campaign's Stage complete, and writes its PR line and Work notes.
 4. When review lands, `/respond <PR#>` — fixes what's right, drafts replies, and posts them if you say to.
