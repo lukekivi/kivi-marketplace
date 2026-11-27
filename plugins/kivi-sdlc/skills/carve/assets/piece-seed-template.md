@@ -38,7 +38,7 @@ piece: NN
 
 ## Affected areas
 
-<The product surfaces and high-level areas this piece touches — screens, flows, modules, layers — enough to orient recon. Not a design or a file-by-file plan; how to build it is `/plan`'s job. Name a specific technical approach only when it's obvious or genuinely necessary to scope the piece, and even then as a suggestion, not a directive.>
+<The product surfaces and high-level areas this piece touches — screens, flows, modules, layers — enough to orient recon. Not a design or a file-by-file plan; how to build it is `/plan`'s job. Name a specific technical approach only when it's obvious or truly necessary to scope the piece, and even then as a suggestion, not a directive.>
 
 ## Reference material
 

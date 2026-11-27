@@ -1,6 +1,6 @@
 ---
 name: recon
-description: Single-PR entry point that frames a piece of work at the product and direction level — what is being built and why, its acceptance criteria, and whether it is one coherent PR. Does light codebase reconnaissance only (enough for readiness and anchors), records its frame as a campaign on the ticket's spec, gauges readiness to plan, can dispatch UAV investigators to ascertain historical context, and hands off to /plan. It leaves architecture and implementation shaping to /plan. If the work is too big for one clean PR, it tells you to split it up rather than routing a multi-phase project itself. Use this when you have a single ticket or task and want it ready to plan.
+description: Single-PR entry point that frames a piece of work at the product and direction level — what is being built and why, its acceptance criteria, and whether it is one coherent PR. Does light codebase reconnaissance only (enough for readiness and anchors), records its frame as a campaign on the ticket's spec, gauges readiness to plan, can dispatch UAV investigators to dig up historical context, and hands off to /plan. It leaves architecture and implementation shaping to /plan. If the work is too big for one clean PR, it tells you to split it up rather than routing a multi-phase project itself. Use this when you have a single ticket or task and want it ready to plan.
 argument-hint: "[task description or ticket key]"
 ---
 
@@ -118,7 +118,7 @@ This is the ready-to-plan gauge, presented to the user, and the loop that raises
 
 Recon readies a single PR. The only routing question is whether this task *should* be one PR at all.
 
-13. Judge whether the work is better split up. There is no checklist or threshold — use your reconnaissance read of the work's size, risk, and natural boundaries. Bias toward keeping it as one PR; only flag a split when it is genuinely advisable (e.g. foundational work that must land and be validated before the rest, a part that delivers value or retires risk on its own, or sheer size that would make one PR unreviewable).
+13. Judge whether the work is better split up. There is no checklist or threshold — use your reconnaissance read of the work's size, risk, and natural boundaries. Bias toward keeping it as one PR; only flag a split when it is clearly worth it (e.g. foundational work that must land and be validated before the rest, a part that delivers value or retires risk on its own, or sheer size that would make one PR unreviewable).
 14. **If one PR is fine**, say nothing about splitting — go straight to Phase 5.
 15. **If a split is advisable**, surface it once, plainly: tell the user this is better split into smaller pieces of work, name the seam(s) you see so they can sanity-check, and recommend they stop recon and go split it up (into separate tickets, or whatever their phasing tool of choice is — recon does not do it for them). Then let them decide via `AskUserQuestion`:
     - **Split it up** — stop here. Do not write a campaign. If working-tree edits exist from Phase 2b, remind the user they remain uncommitted and offer to revert.
@@ -140,7 +140,7 @@ The campaign's Recon is a **strict contract** that `/plan` relies on. Its conten
     - **Acceptance criteria are derived for this campaign's PR**, never copied forward from an earlier campaign. A fix campaign's criteria cover the fix and its regression check, not a restatement of Alpha's.
     - **A gap in the prose itself** — acceptance criteria the spec states wrongly or is missing — normally lives in the campaign. If it belongs in the prose, propose the exact edit and apply it through **update-prose** only on the user's approval.
     - Optional (omit heading and all when empty): Clarifications, Historical context, Manual exploration, Working-tree edits. Clarifications become required from Campaign Bravo onward, opening with why the campaign exists.
-    - **Historical context** is required if any UAV ran in Phase 3. Summarize what the UAVs ascertained — the relevant tickets/PRs/commits and *why they matter* — plus any readiness shift. This is context the downstream skill inherits, not a plan.
+    - **Historical context** is required if any UAV ran in Phase 3. Summarize what the UAVs turned up — the relevant tickets/PRs/commits and *why they matter* — plus any readiness shift. This is context the downstream skill inherits, not a plan.
     - If Phase 2b ran, both **Manual exploration** and **Working-tree edits** are required. Manual exploration summarizes what the user-run investigation revealed. Working-tree edits lists every touched file so `/plan` or `/work` can revert before implementing the real fix.
     - Do not propose, hint at, or preview the implementation — that belongs to `/plan`.
 

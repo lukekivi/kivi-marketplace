@@ -24,7 +24,7 @@ argument-hint: "[spec locator (ticket key or spec file), .claude/kivi-sdlc/plans
 4. Read the work doc completely.
 5. If anything is unclear or ambiguous after reading the plan, references, and related code, ask the user now.
    - Better to ask once before starting than to build the wrong thing. Get user approval to proceed.
-   - If the ambiguity is *historical* — why the code is the way it is, what a past decision assumed — you can dispatch a UAV investigator to ascertain it instead of (or before) asking. See **Investigating deeper (UAV)** below.
+   - If the ambiguity is *historical* — why the code is the way it is, what a past decision assumed — you can dispatch a UAV investigator to chase it down instead of (or before) asking. See **Investigating deeper (UAV)** below.
    - Skip this step if the plan is clear and the path forward is obvious.
 6. Verify the repo setup and baseline quality commands before major edits — run this in a subagent.
    - Launch a subagent (model: "haiku") that confirms dependencies are installed, then runs tests, lint, formatter, and type checks.
@@ -64,7 +64,7 @@ After all plan work is complete, validate the full body of work with subagent re
     - Both subagents must use `model: "sonnet"` for speed and cost efficiency.
     - Each Agent invocation starts with fresh context — include all necessary details in the prompt.
     - Build each subagent prompt by reading the corresponding template, then filling in the specifics of the full plan.
-    - **Completeness review** — Read `${CLAUDE_SKILL_DIR}/assets/completeness-review-prompt.md` for the prompt framework. Fill in the plan path, all tasks completed, and the list of all changed files. The subagent reads the plan and all changed files, then evaluates whether the work is genuinely complete with no omissions, hacks, disabled warnings, or workarounds. The subagent should assume that the code builds and the tests pass and should not verify this itself.
+    - **Completeness review** — Read `${CLAUDE_SKILL_DIR}/assets/completeness-review-prompt.md` for the prompt framework. Fill in the plan path, all tasks completed, and the list of all changed files. The subagent reads the plan and all changed files, then evaluates whether the work is actually complete with no omissions, hacks, disabled warnings, or workarounds. The subagent should assume that the code builds and the tests pass and should not verify this itself.
     - **Test quality review** — Read `${CLAUDE_SKILL_DIR}/assets/test-quality-review-prompt.md` for the prompt framework. Fill in the plan path, all tasks completed, the test files, and the implementation files. The subagent reads the implementation and tests, then evaluates whether the tests verify real behavior, cover edge cases, and would actually catch bugs.
 12. Act on review findings.
     - If either reviewer reports issues worth fixing: fix them, then re-run the relevant quality checks.
@@ -85,7 +85,7 @@ After all plan work is complete, validate the full body of work with subagent re
 
 ## Investigating deeper (UAV)
 
-Dispatch UAV investigators whenever a *historical* question is blocking progress — why the code behaves as it does, what a prior decision assumed, whether an approach was already tried — or whenever the user tells you to investigate deeper. Don't reach for a UAV to answer questions the current code and plan already settle; it ascertains history, not implementation.
+Dispatch UAV investigators whenever a *historical* question is blocking progress — why the code behaves as it does, what a prior decision assumed, whether an approach was already tried — or whenever the user tells you to investigate deeper. Don't reach for a UAV to answer questions the current code and plan already settle; it exists to dig up history.
 
 - One goal per UAV. For each concern write a brief: **Goal** (one line — the question this UAV answers), **Seeds** (deterministic anchors: paths, commit hashes, ticket keys, PR numbers), **Suggestions** (soft hints on where to look, optional).
 - Launch each UAV with the **Agent tool** (`general-purpose` subagent). The prompt must be self-contained and mirror the `uav` skill: state the read-only UAV role, the goal, the seeds, the surfaces available (git history; PRs via commit hash → `gh`; tickets + comments via the available tracker client (a CLI or an MCP); traverse commit → PR → ticket freely), and the expected `UAV DIGEST` output shape. **Launch all UAVs of a wave in a single message so they run in parallel.**

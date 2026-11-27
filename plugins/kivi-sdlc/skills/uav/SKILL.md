@@ -33,7 +33,7 @@ Three surfaces tend to hold the history you're after. You already know how to dr
 
 - **Git history** — the record of *when and why* the code changed, and which commits touched a given path or line. Best for tracing a current behavior back to the change that introduced it and the reasoning attached to that change.
 - **Pull requests** — the conversation around a change: review back-and-forth, alternatives that were rejected, linked issues. A commit resolves to its PR, and the PR often holds the *why* the commit message compressed away. `gh` is available.
-- **Tracker tickets and their comments** — product intent and the decisions made along the way. The **comments** are usually where the real constraints and late scope changes live, so don't stop at the description. Read it through whatever tracker client is available (a CLI or an MCP).
+- **Tracker tickets and their comments** — product intent and the decisions made along the way. Late scope changes and hard-won constraints usually land in the **comments**, so don't stop at the description. Read it through whatever tracker client is available (a CLI or an MCP).
 
 All read-only. Git inspection only — never touch history or the working tree.
 
