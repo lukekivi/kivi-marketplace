@@ -7,7 +7,7 @@ The **spec** is the single source of truth for a piece of work. Every kivi-sdlc 
 A spec has two parts, and the tooling owns only the second:
 
 - **Spec prose** — the ticket description or the spec file. Human-owned. kivi-sdlc reads it and, as a rule, leaves it alone — its own output goes in campaigns. The rare exception is a gap in the prose itself, most often missing or wrong acceptance criteria, which a skill may close through **update-prose**, only with the user's explicit approval of the exact edit. (`/recon` on a freeform task also creates the prose file once, holding the task as given — see Resolving the backend.)
-- **Campaigns** — the tooling's output, stored **beside** the prose, never inside it. A campaign is one full trip through the pipeline (recon → plan → work → respond): a Stage line, a PR line, a Summary, and collapsed Recon, Plan, and Work notes sections. Its content shape, the NATO name list, and the header marker are defined by `${CLAUDE_PLUGIN_ROOT}/skills/recon/assets/campaign.md`. A second attempt or a bug fix opens the next campaign instead of growing an earlier one.
+- **Campaigns** — the tooling's output, stored **beside** the prose, never inside it. One campaign per trip through the pipeline; its content shape, name sequence, and header marker are all defined by the campaign template, `${CLAUDE_PLUGIN_ROOT}/skills/recon/assets/campaign.md`. A second attempt or a bug fix opens the next campaign instead of growing an earlier one.
 
 Only `/recon` starts campaigns. On a spec with none, it opens Campaign Alpha; on a spec that already has campaigns, it asks one question — **continue the latest campaign** (update its Recon) or **open the next one**. It never infers which from state.
 
