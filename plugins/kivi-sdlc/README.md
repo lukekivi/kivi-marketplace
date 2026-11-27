@@ -4,15 +4,12 @@ Personal SDLC workflow for Claude Code. Spec-driven: when a task has a ticket, *
 
 ## The spec
 
-Every task has a **spec** in two parts:
-
-- **Spec prose** — the ticket description or spec file. Yours. The tooling reads it and edits it only rarely — to close a gap such as missing acceptance criteria, and only with your approval of the exact edit.
-- **Campaigns** — the tooling's output, stored beside the prose. A campaign is one full trip through the pipeline (recon → plan → work → respond), named from the NATO alphabet in order: Alpha, Bravo, Charlie… Each carries a `recon · plan · work` **Stage** line, a **PR** line, a one-or-two-line **Summary**, and collapsed **Recon**, **Plan**, and **Work notes** sections. A second attempt or a bug fix opens the next campaign instead of growing the last one, so each agent loads only the campaign it works on.
+Every task has a **spec** in two parts: the **prose** (the ticket description or spec file — yours; the tooling edits it only to close a gap, and only with your approval of the exact edit) and **campaigns** (the tooling's output, stored beside the prose). A campaign is one full trip through the pipeline (recon → plan → work → respond). Its anatomy, naming, and header marker are defined once, in [`campaign.md`](skills/recon/assets/campaign.md).
 
 Where the spec lives is pluggable — see [`spec-backends.md`](spec-backends.md). Two adapters today:
 
-- **tracker** — a work item reached by API. Prose is the description; each campaign is one comment, headed `🤖 kivi-sdlc · Campaign <Name>`.
-- **file** — a markdown file at a path, with campaigns in a sibling directory: `docs/specs/PROJ-123.md` plus `docs/specs/PROJ-123/alpha.md`. This covers both **checked-in** specs and **throwaway** ones (`.claude/kivi-sdlc/scratch/`).
+- **tracker** — a work item reached by API. Prose is the description; each campaign is one comment.
+- **file** — a markdown file at a path, with campaigns in a sibling directory: `docs/specs/PROJ-123.md` plus `docs/specs/PROJ-123/alpha.md`. This covers both checked-in specs and throwaway ones (`.claude/kivi-sdlc/scratch/`).
 
 `/recon` infers the backend (and asks when it can't), opens or continues a campaign, then passes the locator forward so `/plan` and `/work` operate on the same spec's current campaign.
 
