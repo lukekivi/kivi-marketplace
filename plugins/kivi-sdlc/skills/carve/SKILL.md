@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 ## What carve produces
 
-Carve's output is a set of **pieces**, each a **generic ticket/spec** in a resolved backend (a tracker ticket or a spec file — see `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`), plus a **roadmap** tying them together. Each piece is a **pre-recon seed**: the body a work item starts life with — goal, scope, dependencies, rough areas — ready to be picked up by `/recon`. Carve is **upstream** of recon: a piece re-enters the pipeline at `/recon <locator>`, then `/plan`, then `/work`.
+Carve's output is a set of **pieces**, each a generic ticket/spec in a resolved backend (a tracker ticket or a spec file — see `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`), plus a roadmap tying them together. Each piece is a **pre-recon seed**: the body a work item starts life with — goal, scope, dependencies, rough areas — ready to be picked up by `/recon`. Carve is upstream of recon: a piece re-enters the pipeline at `/recon <locator>`, then `/plan`, then `/work`.
 
 ## Hard rules (apply throughout every phase)
 
@@ -23,7 +23,7 @@ Carve's output is a set of **pieces**, each a **generic ticket/spec** in a resol
 ### Phase 1 — Understand the epic
 
 1. Resolve `$ARGUMENTS` and take in whatever context it makes available — all of it is the epic description. Where it already carries analysis of the work (findings, constraints, seams, history), build on it rather than redoing it.
-   - If the input names an **epic ticket** (a `PROJ-###` key or a tracker URL), read the ticket **including its comments** — scope, constraints, and child-work expectations tend to hide in the comments. Read it through whatever tracker client is available (a CLI or an MCP). If neither is available, say so and continue with the task text alone.
+   - If the input names an **epic ticket** (a `PROJ-###` key or a tracker URL), read the ticket including its comments — scope, constraints, and child-work expectations tend to hide in the comments. Read it through whatever tracker client is available (a CLI or an MCP). If neither is available, say so and continue with the task text alone.
    - If it's an existing file path, read its contents.
    - Otherwise, read `<epic_description> $ARGUMENTS </epic_description>` directly.
    - If empty, ask what they want to build and stop.
@@ -65,23 +65,23 @@ Carve's output is a set of **pieces**, each a **generic ticket/spec** in a resol
 
 ### Phase 5 — Resolve the backend
 
-Resolve **one** backend for the whole epic, the way recon resolves a spec backend (see `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`). Infer first; ask only when inference fails. Unlike recon, carve **may create tracker items**, so the tracker backend is available even for a freeform epic.
+Resolve one backend for the whole epic, the way recon resolves a spec backend (see `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`). Infer first; ask only when inference fails. Unlike recon, carve **may create tracker items**, so the tracker backend is available even for a freeform epic.
 
 9. Infer:
    - **Epic is a tracker ticket/URL** → `tracker`. Create each piece as a tracker item linked to the epic (a child, or a relates-to link if the tracker lacks a parent/child relation).
-   - **Epic came from a recon scratch file, another file path, or freeform** → ask the user (one `AskUserQuestion`): create the pieces as **tracker tickets**, or as **files**? If files, follow recon's file rules — a checked-in specs home if the repo keeps specs checked in, otherwise scratch under `.claude/`.
+   - **Epic came from a recon scratch file, another file path, or freeform** → ask the user (one `AskUserQuestion`): create the pieces as tracker tickets, or as files? If files, follow recon's file rules — a checked-in specs home if the repo keeps specs checked in, otherwise scratch under `.claude/`.
 10. The result is, per piece, a **locator** to hand forward: a ticket key (tracker) or a file path (file).
 
 ### Phase 6 — Create the pieces and roadmap
 
 11. Decide the carve home for the roadmap (and file-backed pieces): `.claude/kivi-sdlc/carves/YYYY-MM-DD-slug/` where `YYYY-MM-DD` is today's date and slug is a 3-5 word kebab-case summary of the epic. Create the directory (and a `pieces/` subdirectory for the file backend).
-12. Create each piece from `${CLAUDE_SKILL_DIR}/assets/piece-seed-template.md` — the **seed body only**, no campaign:
+12. Create each piece from `${CLAUDE_SKILL_DIR}/assets/piece-seed-template.md` — the seed body only, no campaign:
     - **File backend**: write the seed to `pieces/NN-slug.md` (zero-padded, e.g. `pieces/01-auth-foundation.md`). Markdown throughout. The optional frontmatter may point back to `roadmap.md`. The piece's locator is this file path.
     - **Tracker backend**: **confirm, then create** a ticket — title = piece title, description = the seed body rendered in whatever format the field requires — linked to the epic. The piece's locator is the new ticket key. The seed lives in the ticket description; no local piece file is written.
     - Fill in: goal, scope (in/out), dependencies (requires/enables), the affected areas (product surfaces / high-level areas, for orientation only), reference material (any code pointers surfaced in Phase 3 that recon/plan may find useful — not a prescription of what to change; plus in-progress branches/stashes/draft PRs that apply), and notes from the dialogue. **Do not** write acceptance criteria, a design, or a campaign — recon and plan add those.
-13. Record dependencies **both** at the roadmap level and, for hard blocks, at the backend level:
+13. Record dependencies both at the roadmap level and, for hard blocks, at the backend level:
     - The roadmap always carries the ordered piece table plus a dependencies/ordering section.
-    - When a piece is **truly blocked** by another, link them explicitly: on a tracker, create an "is blocked by" issue link between the created tickets; in the file backend, record the blocking piece's locator under that piece's **Requires**.
+    - When a piece is truly blocked by another, link them explicitly: on a tracker, create an "is blocked by" issue link between the created tickets; in the file backend, record the blocking piece's locator under that piece's **Requires**.
 14. Write `roadmap.md` from `${CLAUDE_SKILL_DIR}/assets/roadmap-template.md`:
     - Include the epic overview, the ordered piece table (all statuses `seed`, the Locator column holding each piece's ticket key or file path), the dependencies/ordering section, and any cross-cutting constraints or open questions from the dialogue.
 
