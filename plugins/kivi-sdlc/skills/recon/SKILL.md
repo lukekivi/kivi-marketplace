@@ -9,7 +9,7 @@ argument-hint: "[task description or ticket key]"
 - **Recon owns one thing: its campaign.** Recon opens a campaign (or continues the latest one) beside the spec, on whichever backend holds it (see Phase 5 and `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`) — on a tracker, once and with the user's confirmation. It must never touch any other campaign, never create tracker items, and (on a tracker) never change status, assignees, or any other field. Spec prose changes only to close a gap the user approves (Phase 5, **update-prose**), or when a freeform task's prose is written once (Phase 5).
 - **Never commit working-tree edits during recon.** Recon may modify the tree under Phase 2b to set up tests/exploration, but those edits are uncommitted and must be tracked for revert. Do not perform fixes, refactors, formatting, typo corrections, or "while I'm here" cleanups — even if the user describes related work mid-recon. Capture those as findings, do not act on them.
 - **Never run git operations that change history or the working tree** (commit, reset, stash, rebase, amend, checkout of files). Read-only inspection (`git log`, `git show`, `git blame`, `git status`, `git diff`) is fine.
-- **Never invoke the downstream execution skills** (`/plan`, `/work`) — recon ends at Phase 6 handoff. Dispatching **UAV investigators** (Phase 3) is explicitly allowed: they are read-only context-gathering subagents, not execution handoff. A UAV must never mutate anything (see the `uav` skill's hard rules); if a UAV reports a mutation, treat it as a bug and discard the result.
+- **Never invoke the downstream execution skills** (`/plan`, `/work`) — recon ends at Phase 6 handoff. Dispatching UAV investigators (Phase 3) is explicitly allowed: they are read-only context-gathering subagents, not execution handoff. A UAV must never mutate anything (see the `uav` skill's hard rules); if a UAV reports a mutation, treat it as a bug and discard the result.
 - **Recon is single-PR.** It never plans or dispatches a multi-phase project. If the work is too big for one clean PR, Phase 4 tells the user to go split it up — it does not carve the phases itself.
 - If the user introduces adjacent scope during recon, acknowledge it, write it into the campaign's Clarifications, and continue readying the *original* task. The downstream `/plan` will decide whether to fold it in.
 - **Recon makes no architectural or implementation decisions.** It frames *what* is being built and whether it is ready — not *how* it is built. Do only light codebase reconnaissance (enough to anchor the work and gauge readiness); do not design the solution, choose an approach, or assess how the change fits the architecture. Capture anything implementation-shaped as a finding and defer it to `/plan`.
@@ -20,8 +20,8 @@ argument-hint: "[task description or ticket key]"
 ### Phase 1 — Understand the task
 
 1. Read `<task_description> $ARGUMENTS </task_description>`. If empty, ask the user what they want to build and stop.
-2. **If the input names a ticket** (a `PROJ-###` key or a tracker URL), read the ticket **including its comments** before comprehending the task — the comments often carry the real constraints, decisions, and scope narrowing that the summary omits, and they are not in the default ticket view, so fetch them explicitly. Read it through whatever tracker client is available (a CLI or an MCP). If neither is available, say so and continue with the task text alone — do not block recon on ticket retrieval.
-   - Treat the ticket body **and comments** as part of the task definition. Note any comment that changes scope or adds acceptance criteria.
+2. **If the input names a ticket** (a `PROJ-###` key or a tracker URL), read the ticket including its comments before comprehending the task — the comments often carry the real constraints, decisions, and scope narrowing that the summary omits, and they are not in the default ticket view, so fetch them explicitly. Read it through whatever tracker client is available (a CLI or an MCP). If neither is available, say so and continue with the task text alone — do not block recon on ticket retrieval.
+   - Treat the ticket body and comments as part of the task definition. Note any comment that changes scope or adds acceptance criteria.
    - **A ticket is one spec backend.** Phase 5 resolves where the spec lives (tracker, a checked-in file, or a throwaway scratch file) and writes the campaign there — see `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`.
    - **If the input is a path to an existing spec file**, read its prose through the file adapter instead; it is the task definition the same way a ticket body is.
    - **List existing campaigns.** For either kind of spec locator, run the adapter's **list-campaigns**. Earlier campaigns are more task material, read alongside the prose and comments — Summary, acceptance criteria, and Work notes first; the rest on demand. They inform this run; they do not set its scope. Whether to continue the latest or open the next is asked in Phase 5, not inferred here.
@@ -53,7 +53,7 @@ The grade is an in-conversation gate only — it is not written to the campaign.
 ### Phase 2 — Reconnaissance
 
 4. Do light codebase exploration to understand what the task touches — enough to anchor the work and gauge readiness, not how the change should be built. Use parallel subagents (e.g. `Explore`) for breadth when the task spans unfamiliar areas. Stay light — this is a readiness decision, not a plan, and the architecture read belongs to `/plan`.
-5. **Capture deterministic anchors** as you go — these become UAV seeds in Phase 3 and populate the campaign. For the key files/areas the task touches, record the **paths**, the recent **commit hashes** that touched them, and any **ticket keys** (`PROJ-###`) and **PR numbers** (`#####`) those commits carry. These are facts, not interpretation — do not yet investigate *why* those commits/tickets exist; that is a UAV's job if Phase 3 dispatches one.
+5. **Capture deterministic anchors** as you go — these become UAV seeds in Phase 3 and populate the campaign. For the key files/areas the task touches, record the paths, the recent commit hashes that touched them, and any ticket keys (`PROJ-###`) and PR numbers (`#####`) those commits carry. These are facts, not interpretation — do not yet investigate *why* those commits/tickets exist; that is a UAV's job if Phase 3 dispatches one.
 6. **Keep a rough sense of size** as you explore — enough to feed the Phase 4 split-check. You are not carving phases; you are only noticing whether this is plausibly one clean PR or whether it is sprawling enough that the user would be better off splitting it.
 
 ### Phase 2b — Resolve ambiguity (conditional)
@@ -94,7 +94,7 @@ This is the ready-to-plan gauge, presented to the user, and the loop that raises
 
 8. **Present the score to the user** — a compact scorecard (the four dimensions, the total, the band) and a one-line read of where the gaps are.
 
-9. **Offer deeper investigation when a historical question is worth it.** Raise UAV dispatch when reconnaissance surfaced a **specific question a UAV could answer** — an unclear behavior, constraint, or prior decision whose answer lives in git history, a past PR, or a ticket — and you hold the **seeds** to chase it (paths, commit hashes, ticket keys, PR numbers). Lacking a nameable question and its seeds, go straight to Phase 4 with the current score.
+9. **Offer deeper investigation when a historical question is worth it.** Raise UAV dispatch when reconnaissance surfaced a specific question a UAV could answer — an unclear behavior, constraint, or prior decision whose answer lives in git history, a past PR, or a ticket — and you hold the **seeds** to chase it (paths, commit hashes, ticket keys, PR numbers). Lacking a nameable question and its seeds, go straight to Phase 4 with the current score.
    - When a question exists, name it and offer via `AskUserQuestion`:
      - **Investigate** — dispatch UAV(s) (step 10).
      - **I'll provide it** — the user supplies the context. Fold it in, re-score (step 12), and continue.
@@ -105,7 +105,7 @@ This is the ready-to-plan gauge, presented to the user, and the loop that raises
     - **Seeds** — the relevant Phase 2 anchors (paths, commit hashes, ticket keys, PR numbers). They start the UAV off; it roams from there.
     - **Suggestions** — soft hints on where to look, if you have any.
 
-    Launch each UAV with the **Agent tool** (`general-purpose` subagent). The prompt must be self-contained and mirror the `uav` skill: state the read-only UAV role, the goal, the seeds, the available surfaces (git history; PRs via commit hash → `gh`; tickets + comments via the available tracker client; traverse commit → PR → ticket freely), and the expected `UAV DIGEST` output shape. **Launch all UAVs of a wave in a single message so they run in parallel.**
+    Launch each UAV with the **Agent tool** (`general-purpose` subagent). The prompt must be self-contained and mirror the `uav` skill: state the read-only UAV role, the goal, the seeds, the available surfaces (git history; PRs via commit hash → `gh`; tickets + comments via the available tracker client; traverse commit → PR → ticket freely), and the expected `UAV DIGEST` output shape. Launch all UAVs of a wave in a single message so they run in parallel.
 
 11. **Collect and fold in.** Read each returned digest. Fold the findings into your reconnaissance understanding, and note anything under `SHIFTS` that changes scope or risk.
 
@@ -126,7 +126,7 @@ Recon readies a single PR. The only routing question is whether this task *shoul
 
 ### Phase 5 — Write the campaign
 
-The campaign's Recon is a **strict contract** that `/plan` relies on. Its content is the same wherever it lives; only the backend differs. Resolve the backend and write the campaign per `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`.
+The campaign's Recon is a strict contract that `/plan` relies on. Its content is the same wherever it lives; only the backend differs. Resolve the backend and write the campaign per `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`.
 
 16. **Resolve the backend** (infer, else ask), per the resolution rules in `spec-backends.md`: a ticket argument → `tracker`; an existing spec-file path → that `file`; a freeform task → a checked-in `file` where the repo already keeps specs, otherwise ask the user checked-in-vs-scratch. A freeform task's text becomes the new spec's prose. This yields the spec **locator** (a ticket key or a file path).
 17. **Continue or open.** If Phase 1 found no campaigns, this run opens Campaign Alpha. If campaigns exist, ask one question via `AskUserQuestion`, naming the latest campaign and its Stage:

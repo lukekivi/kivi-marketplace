@@ -7,7 +7,7 @@ The **spec** is the single source of truth for a piece of work. Every kivi-sdlc 
 A spec has two parts, and the tooling owns only the second:
 
 - **Spec prose** — the ticket description or the spec file. Human-owned. kivi-sdlc reads it and, as a rule, leaves it alone — its own output goes in campaigns. The rare exception is a gap in the prose itself, most often missing or wrong acceptance criteria, which a skill may close through **update-prose**, only with the user's explicit approval of the exact edit. (`/recon` on a freeform task also creates the prose file once, holding the task as given — see Resolving the backend.)
-- **Campaigns** — the tooling's output, stored **beside** the prose, never inside it. One campaign per trip through the pipeline; its content shape, name sequence, and header marker are all defined by the campaign template, `${CLAUDE_PLUGIN_ROOT}/skills/recon/assets/campaign.md`. A second attempt or a bug fix opens the next campaign instead of growing an earlier one.
+- **Campaigns** — the tooling's output, stored beside the prose, never inside it. One campaign per trip through the pipeline; its content shape, name sequence, and header marker are all defined by the campaign template, `${CLAUDE_PLUGIN_ROOT}/skills/recon/assets/campaign.md`. A second attempt or a bug fix opens the next campaign instead of growing an earlier one.
 
 Only `/recon` starts campaigns. On a spec with none, it opens Campaign Alpha; on a spec that already has campaigns, it asks one question — **continue the latest campaign** (update its Recon) or **open the next one**. It never infers which from state.
 
@@ -25,7 +25,7 @@ A spec is identified by a **locator** — a single string that both names the sp
 - **Tracker locator** — a ticket key or tracker URL (e.g. `PROJ-123`, a tracker URL).
 - **File locator** — a path to the spec prose file (e.g. `docs/specs/foo.md`, `.claude/kivi-sdlc/scratch/recon-<timestamp>.md`). Its campaigns live in the sibling directory named after it, minus `.md`.
 
-The locator names the spec, not a campaign. It is **passed forward** through the pipeline: recon resolves it once and prints it in the handoff command (`/plan <locator>`), plan passes it to `/work <locator>`. Downstream skills never re-infer the backend — they detect the adapter from the locator's shape and operate on the current campaign.
+The locator names the spec, not a campaign. It is passed forward through the pipeline: recon resolves it once and prints it in the handoff command (`/plan <locator>`), plan passes it to `/work <locator>`. Downstream skills never re-infer the backend — they detect the adapter from the locator's shape and operate on the current campaign.
 
 ## Campaign operations
 
@@ -71,7 +71,7 @@ A markdown file at a path. This single adapter covers both **checked-in** specs 
 
 ## Resolving the backend (spec-creating skills only)
 
-Only the skills that **create** specs infer a backend: `/recon` (one spec per run) and `/carve` (one piece per phase when it carves an epic). Downstream skills (`/plan`, `/work`, `/respond`) never infer — they are handed a locator and detect `tracker` vs `file` from its shape. Infer first; ask only when inference fails.
+Only the skills that create specs infer a backend: `/recon` (one spec per run) and `/carve` (one piece per phase when it carves an epic). Downstream skills (`/plan`, `/work`, `/respond`) never infer — they are handed a locator and detect `tracker` vs `file` from its shape. Infer first; ask only when inference fails.
 
 `/recon` resolves a backend as follows:
 
@@ -79,7 +79,7 @@ Only the skills that **create** specs infer a backend: `/recon` (one spec per ru
 2. **Argument is a path to an existing spec file** → `file` at that path.
 3. **No locator — a freeform task.** Decide where a file-backed spec should live, then write the task text, as given, as the spec prose — human-owned from then on, like any other prose:
    - Look for an existing checked-in specs home: a `specs/` or `docs/specs/` directory, or committed spec files with campaign directories beside them. If one is found, write the new spec there (checked-in), naming it by ID when one exists, otherwise a short kebab-slug.
-   - If nothing in the repo indicates where checked-in specs go, **ask the user directly** (one question): checked-in at a suggested path, or throwaway in `.claude/kivi-sdlc/scratch/`. Honor their choice; default the scratch file to `recon-<timestamp>.md`.
+   - If nothing in the repo indicates where checked-in specs go, ask the user directly (one question): checked-in at a suggested path, or throwaway in `.claude/kivi-sdlc/scratch/`. Honor their choice; default the scratch file to `recon-<timestamp>.md`.
 
 `/carve` resolves one backend for the whole epic and may create tracker items (unlike recon): an epic that is itself a tracker ticket → `tracker` (create one linked item per piece); a freeform or file-based epic → it asks the user tracker-vs-file. See the carve skill for the full rules.
 
