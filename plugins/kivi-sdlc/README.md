@@ -1,12 +1,12 @@
 # kivi-sdlc
 
-Personal SDLC workflow for Claude Code. Spec-driven: when a task has a ticket, **the ticket is the source of truth** — the skills read it and record their work in campaigns beside it, leaving what you wrote alone unless you approve an edit.
+Personal SDLC workflow for Claude Code. Spec-driven: when a task has a ticket, **the ticket is the source of truth**: the skills read it and record their work in campaigns beside it, leaving what you wrote alone unless you approve an edit.
 
 ## The spec
 
-Every task has a **spec** in two parts: the **prose** (the ticket description or spec file — yours; the tooling edits it only to close a gap, and only with your approval of the exact edit) and **campaigns** (the tooling's output, stored beside the prose). A campaign is one full trip through the pipeline (recon → plan → work → respond). Its anatomy, naming, and header marker are defined once, in [`campaign.md`](skills/recon/assets/campaign.md).
+Every task has a **spec** in two parts: the **prose** (the ticket description or spec file; it's yours, and the tooling edits it only to close a gap, with your approval of the exact edit) and **campaigns** (the tooling's output, stored beside the prose). A campaign is one full trip through the pipeline (recon → plan → work → respond). Its anatomy, naming, and header marker are defined once, in [`campaign.md`](skills/recon/assets/campaign.md).
 
-Where the spec lives is pluggable — see [`spec-backends.md`](spec-backends.md). Two adapters today:
+Where the spec lives is pluggable; see [`spec-backends.md`](spec-backends.md). Two adapters today:
 
 - **tracker** — a work item reached by API. Prose is the description; each campaign is one comment.
 - **file** — a markdown file at a path, with campaigns in a sibling directory: `docs/specs/PROJ-123.md` plus `docs/specs/PROJ-123/alpha.md`. This covers both checked-in specs and throwaway ones (`.claude/kivi-sdlc/scratch/`).
@@ -29,10 +29,10 @@ Each skill's own doc carries the full workflow and rules.
 
 ## Typical flow
 
-For an epic too big for one PR, start with `/carve "<epic>"` (or `/carve PROJ-123`) to carve it into pieces — each a generic ticket/spec in a tracker or file backend. Then run the flow below on each piece — or hand 2–3 ready pieces to `/warroom PROJ-123 PROJ-124` to drive them to PR in waves while you stay the one decision point.
+For an epic too big for one PR, start with `/carve "<epic>"` (or `/carve PROJ-123`) to carve it into pieces, each a generic ticket/spec in a tracker or file backend. Then run the flow below on each piece, or hand 2–3 ready pieces to `/warroom PROJ-123 PROJ-124` to drive them to PR in waves while you stay the one decision point.
 
 1. `/recon PROJ-123` (or `/recon "<task description>"`) — review the readiness score; when prompted, choose to investigate deeper (dispatches UAVs), proceed, or supply the context yourself. recon opens Campaign Alpha beside the spec (a ticket comment, or a file next to the spec file, depending on the backend).
 2. `/clear`, then `/plan PROJ-123` — writes the Plan into the current campaign (or a local plan file when there's no spec).
 3. `/clear`, then `/work PROJ-123` — implements, reviews, commits, marks the campaign's Stage complete, and writes its PR line and Work notes.
 4. When review lands, `/respond <PR#>` — fixes what's right, drafts replies, and posts them if you say to.
-5. For a bug fix or a second attempt, `/recon PROJ-123` again and choose to open the next campaign (Bravo) — it re-derives acceptance criteria for the new PR, reading Alpha as context.
+5. For a bug fix or a second attempt, `/recon PROJ-123` again and choose to open the next campaign (Bravo); it re-derives acceptance criteria for the new PR, reading Alpha as context.
