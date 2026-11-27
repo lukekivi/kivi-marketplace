@@ -10,7 +10,7 @@
 |---|-------|--------|---------|-----|------|
 | 1 | <Title> | seed | <ticket key or file path> | — | [pieces/01-slug.md](pieces/01-slug.md) |
 
-Status values: `seed` → `in progress` → `merged`. Granular pipeline state (recon · plan · work) lives on each piece's own **Stage** line once `/recon` runs.
+Status values: `seed` → `in progress` → `merged`.
 
 **Locator** is what you pass to `/recon` — a ticket key (tracker backend) or the seed file path (file backend). In the tracker backend the **Seed** column is `—`; the seed lives in the ticket description.
 

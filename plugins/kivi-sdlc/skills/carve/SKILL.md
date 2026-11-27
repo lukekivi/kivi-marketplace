@@ -1,7 +1,7 @@
 ---
 name: carve
 description: Divide an epic into a set of ready-to-recon pieces. Runs a meta-planning dialogue to understand the full scope, proposes how to carve the epic into independently shippable units, resolves a spec backend (tracker or file) the way recon does, and creates one generic ticket/spec per piece — each a pre-recon seed carrying its goal, scope, dependencies, and rough areas — plus a roadmap tying them together. Each piece then enters the pipeline on its own via `/recon <locator>`. Use this when a feature or epic is too large for a single PR and you want it split into discrete, pipeline-ready work items. Carve sits upstream of recon; it does not write the managed spec block (recon owns that) and never writes implementation code.
-argument-hint: "[epic to divide — a description, an epic ticket key, or a recon scratch file]"
+argument-hint: "[epic to divide — a description, an epic ticket key, or a file]"
 disable-model-invocation: true
 ---
 
@@ -22,10 +22,9 @@ Carve's output is a set of **pieces**, each a **generic ticket/spec** in a resol
 
 ### Phase 1 — Understand the epic
 
-1. Resolve `$ARGUMENTS`:
-   - If it matches `.claude/kivi-sdlc/scratch/recon-*.md`, it's a `/recon` scratch file. Read it: `## Original task` + `## Clarifications` are the epic description; `## Reconnaissance findings` give you a head start on Phase 3; `## Historical context`, if present, is what recon's UAV investigators already ascertained — inherit it rather than re-investigating; `## Seams`, if present, are the split-worthy seams recon already identified — treat them as the starting point for your carve rather than re-deriving them. The frontmatter `decision` will be `multi-phase` since recon routed here.
+1. Resolve `$ARGUMENTS` and take in whatever context it makes available — all of it is the epic description. Where it already carries analysis of the work (findings, constraints, seams, history), build on it rather than redoing it.
    - If the input names an **epic ticket** (a `PROJ-###` key or a tracker URL), read the ticket **including its comments** — the comments often carry the real scope, constraints, and child-work expectations. Read it through whatever tracker client is available (a CLI or an MCP). If neither is available, say so and continue with the task text alone.
-   - If it's any other existing file path, read its contents and use them as the epic description.
+   - If it's an existing file path, read its contents.
    - Otherwise, read `<epic_description> $ARGUMENTS </epic_description>` directly.
    - If empty, ask what they want to build and stop.
 2. Decide whether brainstorming is needed. If the scope is already clear and the carve is obvious, skip to Phase 2.
@@ -90,5 +89,4 @@ Resolve **one** backend for the whole epic, the way recon resolves a spec backen
 
 15. Print the roadmap path and each piece's locator.
 16. Tell the user each piece is ready to recon: run `` `/recon <locator>` `` per piece (then `/plan <locator>`, then `/work <locator>`). Suggest `/clear` between sessions — each piece is its own pipeline run.
-17. Note that the roadmap is the initial map: a piece's live pipeline progress is tracked on its own **Stage** line once `/recon` runs. Carve does not update the roadmap afterward.
-18. Never write implementation code here.
+17. Never write implementation code here.
