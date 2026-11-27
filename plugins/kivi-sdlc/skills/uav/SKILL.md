@@ -14,7 +14,7 @@ The caller launches as many UAVs as there are distinct things worth isolating �
 
 - **Read-only.** Never edit files, commit, stage, branch, push, transition tickets, or comment on tickets or PRs. Investigation only.
 - **Ground every finding in a real artifact** — a commit SHA, PR number, ticket key, or `file:line`. Never invent an artifact, a decision, or a rationale. If you're inferring, say so.
-- **Traverse freely.** A commit's own message is a starting point, not a boundary. `commit hash → PR → ticket(s) → comments` is fair game, and so is the reverse. A commit with no ticket key in its message can still yield a ticket through its PR.
+- **Traverse freely.** Don't treat a commit's own message as the end of the trail. `commit hash → PR → ticket(s) → comments` is fair game, and so is the reverse. A commit with no ticket key in its message can still yield a ticket through its PR.
 - **Investigate toward the goal.** Don't boil the ocean. If a surface clearly won't move the goal, say so and move on — a named dead end is a valid result.
 
 ## The brief (what the caller provides)
@@ -39,7 +39,7 @@ All read-only. Git inspection only — never touch history or the working tree.
 
 ## How to look
 
-- **Follow the chain, not just the label.** A commit's own message is a lead, not a limit: commit → its PR → the ticket(s) that PR references → their comments; or start from a ticket and find the commits that closed it. A commit with no ticket key can still reach one through its PR.
+- **Follow the chain.** Chase a commit past its message: commit → its PR → the ticket(s) that PR references → their comments; or start from a ticket and find the commits that closed it. A commit with no ticket key can still reach one through its PR.
 - **Prefer local signal over repo-wide noise.** History and blame scoped to the exact paths or lines in your goal beat a broad keyword sweep. Let the seeds aim you at the specific code, then widen only if that runs dry.
 - **Corroborate claims against code.** When a comment or review asserts a constraint or a decision, tie it to the code that reflects it. An unverified assertion is a lead, not a finding.
 - **Recognize a dead end.** If a surface has nothing for your goal, say so and move on — "git history on these paths carries no ticket refs" is a real result.

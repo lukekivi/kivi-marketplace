@@ -1,6 +1,6 @@
 # <Plan Title>
 
-Use this template as a scaffold, not a cage. Drop sections that do not apply, expand the ones that matter, and add sections when the work needs more structure.
+This template is a scaffold. Drop sections that do not apply, expand the ones that matter, and add sections when the work needs more structure.
 
 ## Goal
 
