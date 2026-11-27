@@ -102,7 +102,7 @@ This is the ready-to-plan gauge, presented to the user, and the loop that raises
 
 10. **Compose briefs and dispatch UAVs.** Spawn **as many UAVs as there are distinct concerns worth isolating** — one goal per UAV. Don't cram unrelated questions into one brief; don't split a single question across many. For each concern, write a brief:
     - **Goal** — one line: the question this UAV answers.
-    - **Seeds** — the relevant Phase 2 anchors (paths, commit hashes, ticket keys, PR numbers). Starting points, not fences.
+    - **Seeds** — the relevant Phase 2 anchors (paths, commit hashes, ticket keys, PR numbers). They start the UAV off; it roams from there.
     - **Suggestions** — soft hints on where to look, if you have any.
 
     Launch each UAV with the **Agent tool** (`general-purpose` subagent). The prompt must be self-contained and mirror the `uav` skill: state the read-only UAV role, the goal, the seeds, the available surfaces (git history; PRs via commit hash → `gh`; tickets + comments via the available tracker client; traverse commit → PR → ticket freely), and the expected `UAV DIGEST` output shape. **Launch all UAVs of a wave in a single message so they run in parallel.**

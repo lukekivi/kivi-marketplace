@@ -32,7 +32,7 @@ argument-hint: "[spec locator (ticket key or spec file), or a feature idea]"
    - Prefer multiple choice when natural options exist — it's faster for the user and forces you to think about realistic possibilities.
    - Keep a running list of assumptions and validate them explicitly.
    - Ask about success criteria: how will the user know this worked?
-   - Treat constraints as creative inputs, not annoyances. They often determine which approaches are actually viable.
+   - Treat constraints as creative inputs; they often determine which approaches are actually viable.
    - Continue until the idea is clear or the user says "proceed."
 
 ### Phase 2 — Explore the repo
@@ -72,7 +72,7 @@ Do not recommend on a weak foundation — keep exploring (Phase 2) or dispatch U
    - **Spec mode**: the plan lives in the current campaign. Write its **Plan** section via the adapter's **update-campaign** from `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`, flip its Stage to `recon ✓ · plan ✓ · work`, and refresh its Summary if the plan changes the picture. Never touch the campaign's Recon or any other campaign. Leave the spec prose alone except through an approved **update-prose**. On a tracker, confirm before writing. A long plan may live inline in the campaign or in a local plan file linked from it — keep the campaign readable.
    - **Normal mode** (no spec): generate `.claude/kivi-sdlc/plans/YYYY-MM-DD-NNN-slug.md` where `YYYY-MM-DD` is today's date, `NNN` is the next available zero-padded sequence for that date, and the slug is a short kebab-case summary (3-5 words). Create the `.claude/kivi-sdlc/plans/` directory if it does not exist.
 11. Write the plan from `${CLAUDE_SKILL_DIR}/assets/plan-template.md`.
-    - Use the template as a scaffold, not a rigid form. Keep only the sections that apply, and add sections when the work needs more structure.
+    - Treat the template as a scaffold. Keep only the sections that apply, and add sections when the work needs more structure.
     - Make the high-level coding decisions crisply — architecture, module placement, the chosen approach, and the contracts/interfaces between the pieces. These are the heart of the spec.
     - The task list should be executable but not exhaustively micro-stepped: capture the key implementation steps and decisions, and leave fine-grained sequencing to `/work`. A reader should be able to execute from it without re-deriving the design.
     - If refactoring is part of the plan, list refactoring tasks before feature tasks. Explain what each refactor achieves structurally.

@@ -95,7 +95,7 @@ This is the moment warroom finally knows what each ticket really involves. Decid
     - **Dependent** — one ticket builds on another's code (B needs A's foundation). Work runs **in sequence**, and B is **stacked**: B's worktree branches from **A's branch**, not the default branch, so B is actually built on A.
     - **Overlapping** — no dependency, but the plans touch the same files. Not a reason to stack on its own: note it in the spec, mention it at the ordering escalation, and run them in parallel. Any merge reconciliation is the user's to do. Stack these only if the user asks.
 16. Record the resulting **work order / chain** in the warroom spec (e.g. `PROJ-123 → PROJ-124 (stacked)`), with the reason.
-17. **Escalate the ordering to the user.** This is a genuine decision, not routine — present the proposed order and stacking with `AskUserQuestion` and adjust to their preference.
+17. **Escalate the ordering to the user.** This decision always goes to them: present the proposed order and stacking with `AskUserQuestion` and adjust to their preference.
 
 ### Phase 6 — Wave 3: work
 

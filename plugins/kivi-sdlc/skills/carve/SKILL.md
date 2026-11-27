@@ -59,7 +59,7 @@ Carve's output is a set of **pieces**, each a **generic ticket/spec** in a resol
    - **Goal**: One sentence — what this piece delivers.
    - **Independently shippable**: Can it merge without breaking anything even if the next piece isn't done?
    - **Dependencies**: Which pieces must land before this one (and which it unblocks)?
-   - **Rough scope**: the product surfaces and high-level areas it touches — enough to size and sequence it, not a design.
+   - **Rough scope**: the product surfaces and high-level areas it touches — enough to size and sequence it; the design belongs to `/plan`.
 8. Ask the user to review and refine using `AskUserQuestion`. Adjust until the carve feels right.
    - Common adjustments: split a piece that's too large, merge two that are too small, reorder based on dependencies or team preferences.
 
@@ -78,7 +78,7 @@ Resolve **one** backend for the whole epic, the way recon resolves a spec backen
 12. Create each piece from `${CLAUDE_SKILL_DIR}/assets/piece-seed-template.md` — the **seed body only**, no campaign:
     - **File backend**: write the seed to `pieces/NN-slug.md` (zero-padded, e.g. `pieces/01-auth-foundation.md`). Markdown throughout. The optional frontmatter may point back to `roadmap.md`. The piece's locator is this file path.
     - **Tracker backend**: **confirm, then create** a ticket — title = piece title, description = the seed body rendered in whatever format the field requires — linked to the epic. The piece's locator is the new ticket key. The seed lives in the ticket description; no local piece file is written.
-    - Fill in: goal, scope (in/out), dependencies (requires/enables), the affected areas (product surfaces / high-level areas — orientation, not a design), reference material (any code pointers surfaced in Phase 3 that recon/plan may find useful — not a prescription of what to change; plus in-progress branches/stashes/draft PRs that apply), and notes from the dialogue. **Do not** write acceptance criteria, a design, or a campaign — recon and plan add those.
+    - Fill in: goal, scope (in/out), dependencies (requires/enables), the affected areas (product surfaces / high-level areas, for orientation only), reference material (any code pointers surfaced in Phase 3 that recon/plan may find useful — not a prescription of what to change; plus in-progress branches/stashes/draft PRs that apply), and notes from the dialogue. **Do not** write acceptance criteria, a design, or a campaign — recon and plan add those.
 13. Record dependencies **both** at the roadmap level and, for hard blocks, at the backend level:
     - The roadmap always carries the ordered piece table plus a dependencies/ordering section.
     - When a piece is **truly blocked** by another, link them explicitly: on a tracker, create an "is blocked by" issue link between the created tickets; in the file backend, record the blocking piece's locator under that piece's **Requires**.

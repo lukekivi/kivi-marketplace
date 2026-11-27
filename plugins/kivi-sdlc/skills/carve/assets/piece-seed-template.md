@@ -7,7 +7,7 @@ human-owned; recon opens Campaign Alpha BESIDE it (a ticket comment, or
 Carve fills this in at the PRODUCT level — what the piece delivers and why, its
 scope and boundaries. It must NOT contain a campaign, a Stage line, or acceptance
 criteria — those belong to recon's campaign — and it is not a design: how to
-build it is `/plan`'s job. Code pointers are orientation, not prescriptions.
+build it is `/plan`'s job. Code pointers are there to orient, nothing more.
 
 The frontmatter below is optional and file-backend only. In the tracker backend the
 seed is the ticket description (no frontmatter); the epic link and roadmap carry the
