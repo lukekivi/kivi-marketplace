@@ -3,7 +3,7 @@ The WARROOM SPEC — the anchor for one warroom operation. warroom owns this fil
 entirely and keeps it current on every wave transition, escalation, answer,
 ordering decision, and PR. If context is lost, operation state is rebuilt from here.
 
-Keep entries terse. This is a board, not a transcript — full specs live on the
+Keep entries terse. This is a board, not a transcript; full specs live on the
 tickets, plans in their campaigns, and detail in the PRs.
 -->
 

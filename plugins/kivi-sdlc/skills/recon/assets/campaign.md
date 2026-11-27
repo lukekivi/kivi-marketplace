@@ -1,6 +1,6 @@
 # kivi-sdlc campaign
 
-A **campaign** is one full trip through the pipeline — recon → plan → work → respond — and where the kivi-sdlc skills write their output onto a spec. It is the one content shape for **every** backend (see `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`): a tracker comment, a checked-in file, or a throwaway scratch file all carry this same unit. It is stored **beside** the spec prose, never inside it; the prose stays human-owned (the rare approved edit to it is **update-prose** in `spec-backends.md`).
+A **campaign** is one full trip through the pipeline (recon → plan → work → respond), and where the kivi-sdlc skills write their output onto a spec. It is the one content shape for **every** backend (see `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`): a tracker comment, a checked-in file, or a throwaway scratch file all carry this same unit. It is stored **beside** the spec prose, never inside it; the prose stays human-owned (the rare approved edit to it is **update-prose** in `spec-backends.md`).
 
 Each campaign is self-contained. A second attempt, a bug fix, or follow-on work opens the next campaign instead of growing an earlier one, so an agent loads only the campaign it is working on and reads earlier ones on demand (Summary first).
 

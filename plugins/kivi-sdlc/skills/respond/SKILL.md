@@ -6,15 +6,15 @@ argument-hint: "[PR number or URL, optionally a spec locator and --post (e.g. 34
 
 ## What respond is
 
-The review-time counterpart to `/work`. The agent that implemented the PR is gone; the **Work notes** of the campaign that built the PR (written by `/work`) are its handoff — the calls it made, where it strayed from the plan, what it knew was fragile. respond starts from those plus the PR itself, the way a compacted `/work` session would.
+The review-time counterpart to `/work`. The agent that implemented the PR is gone; the **Work notes** of the campaign that built the PR (written by `/work`) are its handoff: the calls it made, where it strayed from the plan, what it knew was fragile. respond starts from those plus the PR itself, the way a compacted `/work` session would.
 
-respond **drafts** a reply per thread and posts them only when the user says to — `--post` in the arguments, or after reading the drafts. Resolving threads also needs the user's say-so.
+respond **drafts** a reply per thread and posts them only when the user says to: `--post` in the arguments, or after reading the drafts. Resolving threads also needs the user's say-so.
 
 ## Workflow
 
 ### Pre-flight
 
-1. Resolve `$ARGUMENTS`: the PR (number or URL) and, if given, the spec locator. With no locator, find it from the PR — a ticket key in the branch name, title, or commit subjects. No spec at all is fine; say so and continue on the PR alone.
+1. Resolve `$ARGUMENTS`: the PR (number or URL) and, if given, the spec locator. With no locator, find it from the PR: a ticket key in the branch name, title, or commit subjects. No spec at all is fine; say so and continue on the PR alone.
    - **Find the campaign.** Through the adapter in `${CLAUDE_PLUGIN_ROOT}/spec-backends.md`, list the spec's campaigns and pick the one whose **PR** line matches this PR. If none matches, fall back to the latest and say so.
 2. Check out the PR's head branch and confirm the tree is clean and in sync with the remote (`git status`, `git fetch`, compare to `origin/<branch>`).
 3. Make sure the PR's base is sensible; report it if it isn't.
@@ -33,7 +33,7 @@ respond **drafts** a reply per thread and posts them only when the user says to 
 
 8. Classify each thread:
    - **fix** — the reviewer is right, or it's a cheap improvement within the PR's scope.
-   - **push back** — the current code is right; cite the Work notes, plan, or code that justifies it. Disagreement is fine when warranted — don't fix just to placate.
+   - **push back** — the current code is right; cite the Work notes, plan, or code that justifies it. Disagreement is fine when warranted; don't fix just to placate.
    - **ask** — needs a product/scope call or the reviewer's intent is unclear.
    - **defer** — valid but out of scope; propose a follow-up.
 9. Present the triage to the user (one line per thread, with the planned action) and get approval before changing code.
