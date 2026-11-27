@@ -1,12 +1,12 @@
 ---
 name: respond
-description: "Address code review on an open PR: read the Plan and Work notes of the spec's campaign that built the PR as the handoff from /work, triage every unresolved review thread (fix, push back, or ask), make the fixes in the repo's review-fix commit style, re-validate, push, and draft a reply per thread — posting them only when the user says to. Use when review comments land on a PR built by /work or /warroom."
+description: "Address code review on an open PR: read the Plan and Work notes of the spec's campaign that built the PR as the handoff from /work, triage every unresolved review thread (fix, push back, or ask), make the fixes in the repo's review-fix commit style, re-validate, push, and draft a reply per thread, posting only when the user says to. Use when review comments land on a PR built by /work or /warroom."
 argument-hint: "[PR number or URL, optionally a spec locator and --post (e.g. 3466 PROJ-123 --post)]"
 ---
 
 ## What respond is
 
-The review-time counterpart to `/work`. The agent that implemented the PR is gone; the **Work notes** of the campaign that built the PR (written by `/work`) are its handoff — decisions, deviations, soft spots. respond starts from those plus the PR itself, the way a compacted `/work` session would.
+The review-time counterpart to `/work`. The agent that implemented the PR is gone; the **Work notes** of the campaign that built the PR (written by `/work`) are its handoff — the calls it made, where it strayed from the plan, what it knew was fragile. respond starts from those plus the PR itself, the way a compacted `/work` session would.
 
 respond **drafts** a reply per thread and posts them only when the user says to — `--post` in the arguments, or after reading the drafts. Resolving threads also needs the user's say-so.
 

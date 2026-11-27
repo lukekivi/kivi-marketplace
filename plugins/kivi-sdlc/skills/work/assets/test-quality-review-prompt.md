@@ -68,4 +68,4 @@ Write a brief, structured report:
 
 Be concise. Flag real gaps — missing edge cases, false-confidence tests,
 behavior-vs-implementation problems. Do not pad with style nits or
-suggestions to add tests for things that genuinely don't need them.
+suggestions to add tests for things that don't actually need them.

@@ -11,8 +11,8 @@ Carve's output is a set of **pieces**, each a **generic ticket/spec** in a resol
 
 ## Hard rules (apply throughout every phase)
 
-- **Carve divides; it never implements.** No production code, no refactors, no "while I'm here" edits. It does not flesh out plans — that is `/plan`.
-- **Carve stays at the product level.** It names *what* each piece delivers and *why*, plus its scope, boundaries, and sequencing — not *how* to build it. Carve may surface a technical constraint or suggest an approach, but only when it's obvious or genuinely necessary to size or sequence a piece, and always as a suggestion, not a directive. Real design and implementation decisions belong to `/plan`.
+- **Carve divides; it never implements.** No production code, no refactors, no drive-by edits. It does not flesh out plans — that is `/plan`.
+- **Carve stays at the product level.** It names *what* each piece delivers and *why*, plus its scope, boundaries, and sequencing — not *how* to build it. Carve may surface a technical constraint or suggest an approach, but only when it's obvious or truly necessary to size or sequence a piece, and always as a suggestion, not a directive. Real design and implementation decisions belong to `/plan`.
 - **Carve writes pre-recon seeds, not campaigns.** Each piece carries only its *body* (the spec prose a ticket/spec starts with): goal, scope, dependencies, rough areas. Carve must **never** write a campaign, a **Stage** line, or acceptance criteria — recon opens Campaign Alpha *beside* the seed. Leave acceptance criteria to recon.
 - **Carve may create tracker items** (unlike recon). Creating one ticket per piece is its whole job in the tracker backend. On a tracker, **confirm before creating** anything, and never touch the epic's own prose.
 - **Read-only git; never commit a piece or roadmap on its own.** File-backed pieces are left in the working tree (scratch files under `.claude/` are untracked; checked-in pieces ride along with later work's commits). Do not create a dedicated commit for carve output. No history-changing git operations.
@@ -23,7 +23,7 @@ Carve's output is a set of **pieces**, each a **generic ticket/spec** in a resol
 ### Phase 1 — Understand the epic
 
 1. Resolve `$ARGUMENTS` and take in whatever context it makes available — all of it is the epic description. Where it already carries analysis of the work (findings, constraints, seams, history), build on it rather than redoing it.
-   - If the input names an **epic ticket** (a `PROJ-###` key or a tracker URL), read the ticket **including its comments** — the comments often carry the real scope, constraints, and child-work expectations. Read it through whatever tracker client is available (a CLI or an MCP). If neither is available, say so and continue with the task text alone.
+   - If the input names an **epic ticket** (a `PROJ-###` key or a tracker URL), read the ticket **including its comments** — scope, constraints, and child-work expectations tend to hide in the comments. Read it through whatever tracker client is available (a CLI or an MCP). If neither is available, say so and continue with the task text alone.
    - If it's an existing file path, read its contents.
    - Otherwise, read `<epic_description> $ARGUMENTS </epic_description>` directly.
    - If empty, ask what they want to build and stop.
